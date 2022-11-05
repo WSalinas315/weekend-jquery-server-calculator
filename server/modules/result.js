@@ -1,3 +1,3 @@
-let result = [];
+let results = [];
 
-module.exports = result;
+module.exports = results;
