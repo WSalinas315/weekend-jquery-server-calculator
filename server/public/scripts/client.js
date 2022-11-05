@@ -1,7 +1,11 @@
+const results = require("../../modules/result");
+
 $(document).ready(onReady);
 
 // declare global variables
 let eqOperator;
+let displayHistory =[];
+let displayResults = [];
 
 // onReady function 
 function onReady(){
@@ -41,21 +45,54 @@ function sendEquation(){
 // getEquation function to return result
 function getEquation(){
     console.log('Getting equation results...');
+    // clear results array
+    displayResults = [];
     // GET
     $.ajax({
         method: 'GET',
         url: '/result'
     }).then(function(response){
         console.log('Getting result...', response);
+        displayResults = response;
         render();
     }).catch(function(error){
         alert('getEquation failed:', error);
     })
 }
 
+// getHistory function to return past equations
+function getHistory(){
+    console.log('Getting equation history...');
+    // clear history array
+    displayHistory = [];
+    // GET
+    $.ajax({
+        method: 'GET',
+        url: '/history'
+    }).then(function(response){
+        console.log('Getting history...', response);
+        displayHistory = response;
+    }).catch(function(error){
+        alert('getHistory failed:', error);
+    })
+}
+
 // function for DOM rendering
 function render(){
-
+    console.log('Houston, we are rendering.');
+    // empty #results and #history divs
+    $('#results').empty();
+    $('#history').empty();
+    // write answer to results div
+    $('#results').append(`
+        <h2>${displayResults[displayResults.length-1]}</h2>
+    `);
+    // write past equations to history div
+    for(let i = 0; i< displayHistory.length; i++){
+        $('#history').prepend(`
+            <p id=${i}>${displayHistory[i].operandOne} ${displayHistory[i].operator} ${displayHistory[i].operandTwo} = ${displayResults[i]}
+        `);
+    }
 }
 
 // clear user input fields, reset operator variable and reset operator button visibility
