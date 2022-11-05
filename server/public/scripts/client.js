@@ -6,6 +6,7 @@ let operator;
 // onReady function 
 function onReady(){
     $('#equals-btn').on('click', sendEquation);
+    $('#clear-btn').on('click', clearCalc);
     $('.math').on('click', selectOperator);
 }
 
@@ -19,11 +20,20 @@ function selectOperator(){
 
 // sendEquation function to post equation inputs
 function sendEquation(){
+    console.log('Equals button clicked.');
+}
+
+// function for DOM rendering
+function render(){
 
 }
 
 
-
-
-// reset calculator
-// $('.math').css('opacity','1');
+// clear user input fields, reset operator variable and reset operator button visibility
+function clearCalc(){
+    console.log('Clear button has been clicked.');
+    $('.math').css('opacity','1');
+    $('#first-num').val('');
+    $('#second-num').val('');
+    operator = '';
+}
