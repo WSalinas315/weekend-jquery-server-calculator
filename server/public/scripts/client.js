@@ -30,7 +30,7 @@ function selectOperator(){
 function sendEquation(){
     console.log('Equals button clicked.');
     // check that all inputs are appropriately populated
-    if(($('#first-num').val == '') || ($('#second-num').val() == '')){
+    if(($('#first-num').val() == '') || ($('#second-num').val() == '')){
         alert('Both operands must have a value before a calculation can be made.');
         return;
     } else if(eqOperator == ''){
