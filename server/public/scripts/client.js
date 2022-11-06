@@ -28,6 +28,14 @@ function selectOperator(){
 // sendEquation function to post equation inputs
 function sendEquation(){
     console.log('Equals button clicked.');
+    // check that all inputs are appropriately populated
+    if(($('#first-num').val == '') || ($('#second-num').val() == '')){
+        alert('Both operands must have a value before a calculation can be made.');
+        return;
+    } else if(eqOperator == ''){
+        alert('An operator must be selected.');
+        return;
+    }
     // POST
     $.ajax({
         method: 'POST',
@@ -40,6 +48,7 @@ function sendEquation(){
     }).then(function(response){
         console.log('Posting equation...', response);
         getEquation();
+        resetOperatorBtns();
     }).catch(function(error){
         alert('sendEquation failed', error);
     })
@@ -124,8 +133,13 @@ function render(){
 // clear user input fields, reset operator variable and reset operator button visibility
 function clearCalc(){
     console.log('Clear button has been clicked.');
-    $('.math').css('opacity','1');
     $('#first-num').val('');
     $('#second-num').val('');
-    operator = '';
+    resetOperatorBtns();
+}
+
+// reset operator buttons to initial state
+function resetOperatorBtns(){
+    $('.math').css('opacity','1');
+    eqOperator = '';
 }
