@@ -11,6 +11,7 @@ function onReady(){
     $('#clear-btn').on('click', clearCalc);
     $('.math').on('click', selectOperator);
     $('#del-btn').on('click', deleteHistory);
+    $('#history').on('click', '.history-item', reRun);
     getEquation();
     setTimeout(function(){
         $('#results').empty();
@@ -125,7 +126,7 @@ function render(){
     console.log('Time to write history!');
     for(let i = 0; i< displayHistory.length; i++){
         $('#history').append(`
-            <p id=${i}>${displayHistory[i].operandOne} ${displayHistory[i].operator} ${displayHistory[i].operandTwo} = ${displayResults[i]}</p>
+            <div class="history-item" id=${i}>${displayHistory[i].operandOne} ${displayHistory[i].operator} ${displayHistory[i].operandTwo} = ${displayResults[i]}</div>
         `);
     }
 }
@@ -142,4 +143,30 @@ function clearCalc(){
 function resetOperatorBtns(){
     $('.math').css('opacity','1');
     eqOperator = '';
+}
+
+function reRun(){
+    // find index number of clicked equation
+    let index = $(this).attr("id");
+    console.log('Finding item index for reRun:', index);
+    // reset input fields with previous numbers
+    $('#first-num').val(`${displayHistory[index].operandOne}`);
+    $('#second-num').val(`${displayHistory[index].operandTwo}`);
+
+    // POST
+    $.ajax({
+        method: 'POST',
+        url: '/history',
+        data: {
+            operandOne: displayHistory[index].operandOne,
+            operandTwo: displayHistory[index].operandTwo,
+            operator: displayHistory[index].operator
+        }
+    }).then(function(response){
+        console.log('Re-running equation...', response);
+        getEquation();
+        resetOperatorBtns();
+    }).catch(function(error){
+        alert('sendEquation failed', error);
+    })
 }
