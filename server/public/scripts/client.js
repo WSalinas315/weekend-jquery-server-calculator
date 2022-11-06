@@ -10,6 +10,7 @@ function onReady(){
     $('#equals-btn').on('click', sendEquation);
     $('#clear-btn').on('click', clearCalc);
     $('.math').on('click', selectOperator);
+    $('#del-but').on('click', deleteHistory);
     getEquation();
     setTimeout(function(){
         $('#results').empty();
@@ -77,6 +78,21 @@ function getHistory(){
         render();
     }).catch(function(error){
         alert('getHistory failed:', error);
+    })
+}
+
+// deleteHistory function to clear arrays of past equations and results
+function deleteHistory(){
+    console.log('Making request to delete history...');
+    // DELETE
+    $.ajax({
+        method: 'DELETE',
+        url: '/history',
+        data: {method: 'delete'}
+    }).then(function(response){
+        console.log('History has been erased.', response);
+    }).catch(function(error){
+        console.log('Error erasing history: ', error);
     })
 }
 

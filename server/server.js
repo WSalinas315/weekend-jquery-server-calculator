@@ -27,10 +27,18 @@ app.post('/history', (req, res) => {
     res.sendStatus(200);
 });
 
-// get for result
+// get for /result
 app.get('/result', (req, res) => {
     console.log('Request for /result made');
     res.send(results);
+});
+
+// delete for /history
+app.delete('/history', (req, res) => {
+    console.log('Request made to nuke /history');
+    history = [];
+    results = [];
+    res.sendStatus(201);
 });
 
 // Function to calculate the result of a submitted equation
