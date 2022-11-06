@@ -1,5 +1,3 @@
-const results = require("../../modules/result");
-
 $(document).ready(onReady);
 
 // declare global variables
@@ -12,6 +10,10 @@ function onReady(){
     $('#equals-btn').on('click', sendEquation);
     $('#clear-btn').on('click', clearCalc);
     $('.math').on('click', selectOperator);
+    getEquation();
+    setTimeout(function(){
+        $('#results').empty();
+    }, 10);
 }
 
 // function to assign string value of operator the pressed button
@@ -19,7 +21,7 @@ function selectOperator(){
     $('.math').css('opacity','0.4');
 	eqOperator = $(this).text();
     $(this).css('opacity', '1');
-    console.log('This button was clicked:', operator);
+    console.log('This button was clicked:', eqOperator);
 }
 
 // sendEquation function to post equation inputs
@@ -52,9 +54,9 @@ function getEquation(){
         method: 'GET',
         url: '/result'
     }).then(function(response){
-        console.log('Getting result...', response);
+        console.log('Result status: Got', response);
         displayResults = response;
-        render();
+        getHistory();
     }).catch(function(error){
         alert('getEquation failed:', error);
     })
@@ -70,8 +72,9 @@ function getHistory(){
         method: 'GET',
         url: '/history'
     }).then(function(response){
-        console.log('Getting history...', response);
+        console.log('History status: Got', response);
         displayHistory = response;
+        render();
     }).catch(function(error){
         alert('getHistory failed:', error);
     })
@@ -84,13 +87,18 @@ function render(){
     $('#results').empty();
     $('#history').empty();
     // write answer to results div
-    $('#results').append(`
-        <h2>${displayResults[displayResults.length-1]}</h2>
-    `);
+    if(displayResults[displayResults.length-1] == null){
+        console.log('Skip printing results.');
+    } else {
+        $('#results').append(`
+            <h2>${displayResults[displayResults.length-1]}</h2>
+        `);
+    }
     // write past equations to history div
+    console.log('Time to write history!');
     for(let i = 0; i< displayHistory.length; i++){
-        $('#history').prepend(`
-            <p id=${i}>${displayHistory[i].operandOne} ${displayHistory[i].operator} ${displayHistory[i].operandTwo} = ${displayResults[i]}
+        $('#history').append(`
+            <p id=${i}>${displayHistory[i].operandOne} ${displayHistory[i].operator} ${displayHistory[i].operandTwo} = ${displayResults[i]}</p>
         `);
     }
 }
