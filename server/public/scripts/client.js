@@ -10,7 +10,7 @@ function onReady(){
     $('#equals-btn').on('click', sendEquation);
     $('#clear-btn').on('click', clearCalc);
     $('.math').on('click', selectOperator);
-    $('#del-but').on('click', deleteHistory);
+    $('#del-btn').on('click', deleteHistory);
     getEquation();
     setTimeout(function(){
         $('#results').empty();
@@ -91,6 +91,8 @@ function deleteHistory(){
         data: {method: 'delete'}
     }).then(function(response){
         console.log('History has been erased.', response);
+        // render but the right way
+        getEquation();
     }).catch(function(error){
         console.log('Error erasing history: ', error);
     })
